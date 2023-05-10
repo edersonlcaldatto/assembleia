@@ -11,7 +11,6 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
 
-
 # Documentation
 springdoc:
   api-docs:
@@ -19,8 +18,9 @@ springdoc:
   swagger-ui:
     path: /documentation
 
-
-
+service:
+  resultado:
+    topic: resultado-assembleia-topic
 
 invertexto:
   token: 3486|Vu4dgWUn0CX7Xmc5PHK6uEYITXM2LUw0

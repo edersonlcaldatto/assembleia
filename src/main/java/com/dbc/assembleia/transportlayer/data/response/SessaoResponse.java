@@ -41,4 +41,14 @@ public class SessaoResponse implements Serializable {
     public void setDataHoraFim(LocalDateTime dataHoraFim) {
         this.dataHoraFim = dataHoraFim;
     }
+
+    @Override
+    public String toString() {
+        return "SessaoResponse{" +
+                "id=" + id +
+                ", pauta=" + pauta +
+                ", duracao=" + duracao +
+                ", dataHoraFim=" + dataHoraFim +
+                '}';
+    }
 }

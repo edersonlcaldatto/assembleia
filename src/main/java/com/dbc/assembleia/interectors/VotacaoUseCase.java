@@ -4,6 +4,7 @@ import com.dbc.assembleia.entity.Voto;
 import com.dbc.assembleia.entity.enumerator.ResultadoVotacaoEnum;
 import com.dbc.assembleia.entity.enumerator.VotoEnum;
 import com.dbc.assembleia.exception.VotoJaRealizadoException;
+import com.dbc.assembleia.interectors.queue.ResultadoProducer;
 import com.dbc.assembleia.repositories.VotoRepository;
 import com.dbc.assembleia.transportlayer.data.response.VotacaoResultado;
 import com.dbc.assembleia.transportlayer.data.response.VotoResponse;
@@ -18,12 +19,16 @@ public class VotacaoUseCase {
     private final VotoRepository votoRepository;
     private final SessaoUseCase sessaoUseCase;
     private final DocumentoUseCase documentoUseCase;
+    private final ResultadoProducer resultadoProducer;
 
     public VotacaoUseCase(VotoRepository votoRepository,
-                          SessaoUseCase sessaoUseCase, DocumentoUseCase documentoUseCase) {
+                          SessaoUseCase sessaoUseCase,
+                          DocumentoUseCase documentoUseCase,
+                          ResultadoProducer resultadoProducer) {
         this.votoRepository = votoRepository;
         this.sessaoUseCase = sessaoUseCase;
         this.documentoUseCase = documentoUseCase;
+        this.resultadoProducer = resultadoProducer;
     }
 
     public VotoResponse computarVoto(Voto votoToPost) {
@@ -49,7 +54,7 @@ public class VotacaoUseCase {
     public VotacaoResultado processarResultado(Integer idSessao) {
 
         var sessao = sessaoUseCase.locate(idSessao);
-        var votos = votoRepository.findAllByIdSessao(idSessao);
+        var votos = votoRepository.findAllBySessao(sessao);
 
         var resultado = new VotacaoResultado();
         resultado.setSessao(SessaoMapper.INSTANCE.toSessaoResponse(sessao));
@@ -74,6 +79,7 @@ public class VotacaoUseCase {
             } else {
                 resultado.setResultado(ResultadoVotacaoEnum.EMPATE);
             }
+            resultadoProducer.sendResultado(resultado);
         }
 
         return resultado;

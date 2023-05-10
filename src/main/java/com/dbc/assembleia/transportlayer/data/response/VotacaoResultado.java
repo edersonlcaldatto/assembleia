@@ -2,7 +2,9 @@ package com.dbc.assembleia.transportlayer.data.response;
 
 import com.dbc.assembleia.entity.enumerator.ResultadoVotacaoEnum;
 
-public class VotacaoResultado {
+import java.io.Serializable;
+
+public class VotacaoResultado implements Serializable {
 
     private SessaoResponse sessao;
     private Long totalAprovado;
@@ -48,5 +50,16 @@ public class VotacaoResultado {
 
     public void setResultado(ResultadoVotacaoEnum resultado) {
         this.resultado = resultado;
+    }
+
+    @Override
+    public String toString() {
+        return "VotacaoResultado{" +
+                "sessao=" + sessao +
+                ", totalAprovado=" + totalAprovado +
+                ", totalReprovado=" + totalReprovado +
+                ", totalVotos=" + totalVotos +
+                ", resultado=" + resultado +
+                '}';
     }
 }
