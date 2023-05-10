@@ -13,18 +13,22 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class VotocaoUseCase {
+public class VotacaoUseCase {
 
     private final VotoRepository votoRepository;
     private final SessaoUseCase sessaoUseCase;
+    private final DocumentoUseCase documentoUseCase;
 
-    public VotocaoUseCase(VotoRepository votoRepository,
-                          SessaoUseCase sessaoUseCase) {
+    public VotacaoUseCase(VotoRepository votoRepository,
+                          SessaoUseCase sessaoUseCase, DocumentoUseCase documentoUseCase) {
         this.votoRepository = votoRepository;
         this.sessaoUseCase = sessaoUseCase;
+        this.documentoUseCase = documentoUseCase;
     }
 
     public VotoResponse computarVoto(Voto votoToPost) {
+
+        documentoUseCase.validarDocumento(votoToPost.getDocumento());
 
         var sessao = sessaoUseCase.locate(votoToPost.getSessao().getId());
 

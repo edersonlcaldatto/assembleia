@@ -28,7 +28,7 @@ public class SessaoControllerImpl {
     }
 
     @PostMapping
-    public ResponseEntity<SessaoResponse> cadastraPauta(@RequestBody @Valid SessaoRequest sessaoRequest){
+    public ResponseEntity<SessaoResponse> cadastrarSessao(@RequestBody @Valid SessaoRequest sessaoRequest){
         LOG.info("Cadastrar nova sessao {}", sessaoRequest);
         var sessaoToSave = SessaoMapper.INSTANCE.fromSesssaoRequest(sessaoRequest);
         var sessaoResponse =  SessaoMapper.INSTANCE.toSessaoResponse(sessaoUseCase.cadastrar(sessaoToSave));

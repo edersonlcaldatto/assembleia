@@ -1,0 +1,27 @@
+server:
+  port: 8001
+
+spring:
+  datasource:
+    url: jdbc:mysql://assembleia.czrhasmcs16p.sa-east-1.rds.amazonaws.com:3306/assembleia?autoReconnect=true&useSSL=false
+    username: admin
+    password: password
+  jpa:
+    hibernate.ddl-auto: update
+  kafka:
+    bootstrap-servers: localhost:9092
+
+
+# Documentation
+springdoc:
+  api-docs:
+    path: /api-documentation
+  swagger-ui:
+    path: /documentation
+
+
+
+
+invertexto:
+  token: 3486|Vu4dgWUn0CX7Xmc5PHK6uEYITXM2LUw0
+  api: https://api.invertexto.com
