@@ -4,7 +4,7 @@ import com.dbc.assembleia.entity.Voto;
 import com.dbc.assembleia.entity.enumerator.ResultadoVotacaoEnum;
 import com.dbc.assembleia.entity.enumerator.VotoEnum;
 import com.dbc.assembleia.exception.VotoJaRealizadoException;
-import com.dbc.assembleia.interectors.queue.ResultadoProducer;
+import com.dbc.assembleia.interectors.queue.resultado.ResultadoProducer;
 import com.dbc.assembleia.repositories.VotoRepository;
 import com.dbc.assembleia.transportlayer.data.response.VotacaoResultado;
 import com.dbc.assembleia.transportlayer.data.response.VotoResponse;
@@ -84,4 +84,5 @@ public class VotacaoUseCase {
 
         return resultado;
     }
+
 }

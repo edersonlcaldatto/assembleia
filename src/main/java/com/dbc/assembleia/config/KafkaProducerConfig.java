@@ -1,7 +1,6 @@
 package com.dbc.assembleia.config;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +21,10 @@ import java.util.HashMap;
 public class KafkaProducerConfig {
 
     @Value("${service.resultado.topic}")
-    private String topicName;
+    private String topicResultado;
+
+    @Value("${service.voto.topic}")
+    private String topicFilaVoto;
     private final KafkaProperties kafkaProperties;
 
     public KafkaProducerConfig(KafkaProperties kafkaProperties) {
@@ -56,12 +58,12 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public NewTopic topic() {
-        return TopicBuilder
-                .name(topicName)
-                .partitions(1)
-                .replicas(1)
-                .build();
+    public KafkaAdmin.NewTopics topic() {
+        return new KafkaAdmin.NewTopics(
+                TopicBuilder.name(topicResultado).partitions(1).replicas(1).build(),
+                TopicBuilder.name(topicFilaVoto).partitions(1).replicas(1).build()
+        );
+
     }
 
 }

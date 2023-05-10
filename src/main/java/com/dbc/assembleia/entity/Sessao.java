@@ -29,6 +29,8 @@ public class Sessao {
     public Sessao(@Valid Pauta pauta,@Valid Integer duracao) {
         this.pauta = Objects.requireNonNull(pauta);
         this.duracao = Objects.requireNonNull(duracao);
+        this.dataHoraInicio = LocalDateTime.now();
+        this.dataHoraFim = LocalDateTime.now().plusMinutes(duracao);
     }
 
     public Sessao(Integer id) {

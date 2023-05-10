@@ -1,6 +1,8 @@
 package com.dbc.assembleia.transportlayer.data.request;
 
-public class VotoRequest {
+import java.io.Serializable;
+
+public class VotoRequest implements Serializable {
 
     private Integer codigoSessao;
     private String documento;

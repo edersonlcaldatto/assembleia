@@ -10,7 +10,6 @@ import org.mapstruct.factory.Mappers;
 public interface PautaMapper {
 
     PautaMapper INSTANCE = Mappers.getMapper(PautaMapper.class);
-
     Pauta fromPautaRequest(PautaRequest source);
     PautaResponse toPautaResponse(Pauta pauta);
 }

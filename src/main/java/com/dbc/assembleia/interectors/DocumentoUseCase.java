@@ -23,7 +23,6 @@ public class DocumentoUseCase {
     /*
         Método responsavél por integrar com api de validacao de CPF invertexto
         Caso erro no processamento a classe de fallback irá tratar e retonar cpf inválido.
-
      */
     public void validarDocumento(String documento) {
         log.info("Validando documento do eleitor ");

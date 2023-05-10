@@ -35,4 +35,10 @@ public class VotoResponse {
         votoResponse.setRetorno("Voto recusado, votação encerrada");
         return votoResponse;
     }
+    public static VotoResponse votoEmProcessamento() {
+        var votoResponse = new VotoResponse();
+        votoResponse.setStatus(VotoStatusEnum.EM_FILA_PROCESSAMENTO);
+        votoResponse.setRetorno("Voto enviado para fila de processamento");
+        return votoResponse;
+    }
 }

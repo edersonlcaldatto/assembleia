@@ -1,4 +1,4 @@
-package com.dbc.assembleia.interectors.queue;
+package com.dbc.assembleia.interectors.queue.resultado;
 
 import com.dbc.assembleia.transportlayer.data.response.VotacaoResultado;
 import org.slf4j.Logger;
@@ -12,9 +12,8 @@ import java.io.Serializable;
 @Service
 public class ResultadoProducer {
 
-
     @Value("${service.resultado.topic}")
-    private String topicName;
+    private String topicResultadoName;
 
     private final Logger log = LoggerFactory.getLogger(ResultadoProducer.class);
 
@@ -27,11 +26,11 @@ public class ResultadoProducer {
     public void sendResultado(VotacaoResultado resultado) {
 
         try {
-            var record = objectKafkaTemplate.send(topicName, resultado).get().getRecordMetadata();
-            log.info("Message send to topic {} Partition {} and offset {} ", topicName, record.partition(), record.offset());
+            var record = objectKafkaTemplate.send(topicResultadoName, resultado).get().getRecordMetadata();
+            log.info("Message send to topic {} Partition {} and offset {} ", topicResultadoName, record.partition(), record.offset());
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("Erro ao enviar mensagem para tópico {} erro: {}", topicName, e.getMessage());
+            log.error("Erro ao enviar mensagem para tópico {} erro: {}", topicResultadoName, e.getMessage());
         }
     }
 
