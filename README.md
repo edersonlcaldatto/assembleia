@@ -31,6 +31,13 @@ Desafio proposto pelo sicred
   mvn clean install
 ```
 
+5 - Url compartilhada com a Collection com a chamadas da api (Inclusa no projeto também)
+
+[Assembleia Collection](https://www.postman.com/edersoncaldatto/workspace/dbc-sicredi/collection/9662310-f80c0b4b-23d4-4961-8248-0e88a75ac5fa?action=share&creator=9662310)
+
+
+
+
 
 ## Documentação da API
 

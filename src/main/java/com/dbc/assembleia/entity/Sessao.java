@@ -1,13 +1,16 @@
 package com.dbc.assembleia.entity;
 
+import com.dbc.assembleia.entity.enumerator.StatusEnum;
+
 import javax.persistence.*;
 import javax.validation.Valid;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "SESSAO")
-public class Sessao {
+public class Sessao implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,26 +18,24 @@ public class Sessao {
     @ManyToOne
     @JoinColumn(name = "PAUTA_ID")
     private Pauta pauta;
-    @Column(name = "DURACAO")
-    private Integer duracao;
+    @Column(name = "STATUS")
+    private StatusEnum status;
     @Column(name = "DTHORA_INICIO")
     private LocalDateTime dataHoraInicio;
     @Column(name = "DTHORA_FIM")
     private LocalDateTime dataHoraFim;
-
-    @Deprecated
-    public Sessao() {
-    }
-
-    public Sessao(@Valid Pauta pauta,@Valid Integer duracao) {
+    public Sessao(@Valid Pauta pauta,@Valid StatusEnum status) {
         this.pauta = Objects.requireNonNull(pauta);
-        this.duracao = Objects.requireNonNull(duracao);
+        this.status = Objects.requireNonNull(status);
         this.dataHoraInicio = LocalDateTime.now();
-        this.dataHoraFim = LocalDateTime.now().plusMinutes(duracao);
     }
 
     public Sessao(Integer id) {
         this.id = id;
+    }
+
+    public Sessao() {
+
     }
 
     public Integer getId() {
@@ -53,12 +54,12 @@ public class Sessao {
         this.pauta = pauta;
     }
 
-    public Integer getDuracao() {
-        return duracao;
+    public StatusEnum getStatus() {
+        return status;
     }
 
-    public void setDuracao(Integer duracao) {
-        this.duracao = duracao;
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 
     public LocalDateTime getDataHoraInicio() {

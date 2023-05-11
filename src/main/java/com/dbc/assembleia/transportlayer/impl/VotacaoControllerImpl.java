@@ -22,7 +22,6 @@ public class VotacaoControllerImpl {
     public VotacaoControllerImpl(VotacaoUseCase votacaoUseCase) {
         this.votacaoUseCase = votacaoUseCase;
     }
-
     @PostMapping
     public ResponseEntity<VotoResponse> registrarVoto(@RequestBody @Valid VotoRequest votoRequest) {
         LOG.info("Processando voto {}", votoRequest);

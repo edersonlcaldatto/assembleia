@@ -1,0 +1,207 @@
+{
+	"info": {
+		"_postman_id": "f80c0b4b-23d4-4961-8248-0e88a75ac5fa",
+		"name": "Assembleia",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9662310",
+		"_collection_link": "https://www.postman.com/edersoncaldatto/workspace/dbc-sicredi/collection/9662310-f80c0b4b-23d4-4961-8248-0e88a75ac5fa?action=share&creator=9662310&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Cadastrar Pauta",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"descricao\": \"Pauta novo dev\",\n  \"detalhe\": \"Contratar novo dev SR\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8001/v1/pauta",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"v1",
+						"pauta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Abrir Sessao",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"codigoPauta\": 1\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8001/v1/sessao",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"v1",
+						"sessao"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Encerrar Sessao",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"codigoPauta\": 6,\r\n  \"duracao\": 5\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8001/v1/sessao",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"v1",
+						"sessao"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Realizar Votacao",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"codigoSessao\": 10,\r\n  \"documento\": \"78899295018\",\r\n  \"voto\": \"SIM\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8001/v1/votacao",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"v1",
+						"votacao"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Realizar Votacao V2 - Fila",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"codigoSessao\": 10,\r\n  \"documento\": \"31047960095\",\r\n  \"voto\": \"SIM\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8001/v2/votacao",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"v2",
+						"votacao"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Resultado Sessao",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8001/v1/votacao/resultado/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"v1",
+						"votacao",
+						"resultado",
+						"10"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

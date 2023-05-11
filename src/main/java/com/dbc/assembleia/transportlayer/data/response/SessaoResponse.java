@@ -1,15 +1,14 @@
 package com.dbc.assembleia.transportlayer.data.response;
 
+import com.dbc.assembleia.entity.enumerator.StatusEnum;
+
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 public class SessaoResponse implements Serializable {
 
     private Integer id;
     private PautaResponse pauta;
-    private Integer duracao;
-    private LocalDateTime dataHoraFim;
-
+    private StatusEnum status;
     public Integer getId() {
         return id;
     }
@@ -26,20 +25,8 @@ public class SessaoResponse implements Serializable {
         this.pauta = pauta;
     }
 
-    public Integer getDuracao() {
-        return duracao;
-    }
-
-    public void setDuracao(Integer duracao) {
-        this.duracao = duracao;
-    }
-
-    public LocalDateTime getDataHoraFim() {
-        return dataHoraFim;
-    }
-
-    public void setDataHoraFim(LocalDateTime dataHoraFim) {
-        this.dataHoraFim = dataHoraFim;
+    public StatusEnum getStatus() {
+        return status;
     }
 
     @Override
@@ -47,8 +34,7 @@ public class SessaoResponse implements Serializable {
         return "SessaoResponse{" +
                 "id=" + id +
                 ", pauta=" + pauta +
-                ", duracao=" + duracao +
-                ", dataHoraFim=" + dataHoraFim +
+                ", status=" + status +
                 '}';
     }
 }

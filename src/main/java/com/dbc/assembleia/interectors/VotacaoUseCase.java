@@ -2,6 +2,7 @@ package com.dbc.assembleia.interectors;
 
 import com.dbc.assembleia.entity.Voto;
 import com.dbc.assembleia.entity.enumerator.ResultadoVotacaoEnum;
+import com.dbc.assembleia.entity.enumerator.StatusEnum;
 import com.dbc.assembleia.entity.enumerator.VotoEnum;
 import com.dbc.assembleia.exception.VotoJaRealizadoException;
 import com.dbc.assembleia.interectors.queue.resultado.ResultadoProducer;
@@ -43,7 +44,7 @@ public class VotacaoUseCase {
                     votoToPost.getSessao().getId(), votoToPost.getDocumento()));
         }
 
-        if (LocalDateTime.now().isAfter(sessao.getDataHoraFim())) {
+        if (sessao.getStatus().equals(StatusEnum.ENCERRADA)) {
             return VotoResponse.votoRecusado();
         }
         votoToPost.setHoraVoto(LocalDateTime.now());
@@ -60,7 +61,7 @@ public class VotacaoUseCase {
         resultado.setSessao(SessaoMapper.INSTANCE.toSessaoResponse(sessao));
         resultado.setTotalVotos((long) votos.size());
 
-        if (LocalDateTime.now().isBefore(sessao.getDataHoraFim())) {
+        if (sessao.getStatus().equals(StatusEnum.ABERTA) ) {
             resultado.setResultado(ResultadoVotacaoEnum.EM_ANDAMENTO);
         } else {
             resultado.setTotalAprovado(votos

@@ -3,6 +3,7 @@ package com.dbc.assembleia.interectors;
 import com.dbc.assembleia.entity.Pauta;
 import com.dbc.assembleia.entity.Sessao;
 import com.dbc.assembleia.exception.SessaoNaoLocalizadaException;
+import com.dbc.assembleia.interectors.queue.sessao.SessaoEncerradaProducer;
 import com.dbc.assembleia.repositories.SessaoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,36 +25,38 @@ import static org.mockito.Mockito.when;
 class SessaoUseCaseTest {
 
     SessaoUseCase sessaoUseCase;
-
     @MockBean
     SessaoRepository sessaoRepository;
-
     @MockBean
     PautaUseCase pautaUseCase;
-
-    Pauta pauta;
+    @MockBean
+    SessaoEncerradaProducer sessaoEncerradaProducer;
+    private Pauta pauta;
 
     @BeforeEach
     void setUp() {
-        this.sessaoUseCase = new SessaoUseCase(sessaoRepository, pautaUseCase);
+        this.sessaoUseCase = new SessaoUseCase(sessaoRepository, pautaUseCase, sessaoEncerradaProducer);
         pauta = new Pauta("Pauta teste 1 ", "Detalhes da Pauta");
     }
 
     @Test
-    @DisplayName("Deve cadastrar uma nova sessao")
-    void should_cadastrarSessao() {
-        var sessaoToSave = new Sessao(pauta, 1);
+    @DisplayName("Deve abrir uma nova sessao")
+    void should_abrirSessao() {
+        var sessaoToSave = new Sessao();
+        sessaoToSave.setPauta(pauta);
         when(sessaoRepository.save(any(Sessao.class))).thenReturn(sessaoToSave);
-        var result = sessaoUseCase.cadastrar(sessaoToSave);
+        var result = sessaoUseCase.abrirSessao(sessaoToSave);
 
         assertThat(result).isNotNull();
-        assertThat(sessaoToSave.getDuracao()).isEqualTo(result.getDuracao());
+        assertThat(sessaoToSave.getStatus()).isEqualTo(result.getStatus());
     }
 
     @Test
     @DisplayName("Deve localizar a sessao")
     void shouldLocateSessao() {
-        var sessaoLocated = new Sessao(pauta, 1);
+        var sessaoLocated = new Sessao();
+        sessaoLocated.setId(1);
+        sessaoLocated.setPauta(pauta);
         when(sessaoRepository.findById(1)).thenReturn(Optional.of(sessaoLocated));
 
         var result = sessaoUseCase.locate(1);
@@ -61,7 +64,7 @@ class SessaoUseCaseTest {
         assertThat(result).isNotNull();
         assertThat(result.getPauta().getDescricao()).isEqualTo(sessaoLocated.getPauta().getDescricao());
         assertThat(result.getPauta().getDescricao()).isEqualTo(sessaoLocated.getPauta().getDescricao());
-        assertThat(result.getDuracao()).isEqualTo(sessaoLocated.getDuracao());
+        assertThat(result.getStatus()).isEqualTo(sessaoLocated.getStatus());
     }
 
     @Test
@@ -69,9 +72,9 @@ class SessaoUseCaseTest {
     void sholudThrowsExceptionSessaoNaoLocalizadaException() {
         when(sessaoRepository.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(SessaoNaoLocalizadaException.class, () -> {
-            sessaoUseCase.locate(1);
-        });
+        assertThrows(SessaoNaoLocalizadaException.class, () ->
+            sessaoUseCase.locate(1)
+        );
     }
 
 

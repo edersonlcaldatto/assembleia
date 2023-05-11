@@ -3,6 +3,7 @@ package com.dbc.assembleia.repositories;
 import com.dbc.assembleia.entity.Pauta;
 import com.dbc.assembleia.entity.Sessao;
 import com.dbc.assembleia.entity.Voto;
+import com.dbc.assembleia.entity.enumerator.StatusEnum;
 import com.dbc.assembleia.entity.enumerator.VotoEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,12 +29,11 @@ class VotoRepositoryTest {
 
     @Mock
     private VotoRepository votoRepository;
-
     Sessao sessao;
 
     @BeforeEach
     void setup() {
-        sessao = new Sessao(new Pauta("Teste", "Teste"), 5);
+        sessao = new Sessao(new Pauta("Teste", "Teste"), StatusEnum.ABERTA);
     }
 
     @Test

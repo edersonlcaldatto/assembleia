@@ -4,12 +4,12 @@ import com.dbc.assembleia.entity.Pauta;
 import com.dbc.assembleia.entity.Sessao;
 import com.dbc.assembleia.entity.Voto;
 import com.dbc.assembleia.entity.enumerator.ResultadoVotacaoEnum;
+import com.dbc.assembleia.entity.enumerator.StatusEnum;
 import com.dbc.assembleia.entity.enumerator.VotoEnum;
 import com.dbc.assembleia.exception.DocumentoInvalidoException;
 import com.dbc.assembleia.exception.VotoJaRealizadoException;
 import com.dbc.assembleia.interectors.queue.resultado.ResultadoProducer;
 import com.dbc.assembleia.repositories.VotoRepository;
-import com.dbc.assembleia.transportlayer.data.response.VotacaoResultado;
 import com.dbc.assembleia.transportlayer.data.response.VotoStatusEnum;
 import com.dbc.assembleia.transportlayer.mapper.SessaoMapper;
 import org.junit.jupiter.api.Assertions;
@@ -36,7 +36,6 @@ import static org.mockito.Mockito.*;
 class VotacaoUseCaseTest {
 
     VotacaoUseCase votacaoUseCase;
-
     @MockBean
     VotoRepository votoRepository;
     @MockBean
@@ -46,18 +45,16 @@ class VotacaoUseCaseTest {
     @MockBean
     ResultadoProducer resultadoProducer;
 
-    private Pauta pauta;
     private Sessao sessao;
     private Voto voto1;
     private Voto voto2;
     private Voto voto3;
-    private VotacaoResultado resultadoEsperado;
 
     @BeforeEach
     void setUp() {
         this.votacaoUseCase = new VotacaoUseCase(votoRepository,sessaoUseCase,documentoUseCase,resultadoProducer);
-        pauta = new Pauta("Pauta teste", "Detalhe pauta");
-        sessao = new Sessao(pauta, 5);
+        Pauta pauta = new Pauta("Pauta teste", "Detalhe pauta");
+        sessao = new Sessao(pauta, StatusEnum.ABERTA);
 
         voto1 = new Voto();
         voto1.setVoto(VotoEnum.SIM);
@@ -76,13 +73,6 @@ class VotacaoUseCaseTest {
         voto3.setDocumento("123456783");
         voto3.setSessao(sessao);
         voto3.setHoraVoto(LocalDateTime.now().minusMinutes(1));
-
-        resultadoEsperado = new VotacaoResultado();
-        resultadoEsperado.setSessao(SessaoMapper.INSTANCE.toSessaoResponse(sessao));
-        resultadoEsperado.setTotalVotos(3L);
-        resultadoEsperado.setTotalAprovado(2L);
-        resultadoEsperado.setTotalReprovado(1L);
-        resultadoEsperado.setResultado(ResultadoVotacaoEnum.APROVADA);
     }
 
     @Test
@@ -107,7 +97,7 @@ class VotacaoUseCaseTest {
     @DisplayName("Deve retonar voto recusado, voto fora do horário")
     void shouldReturnVotoRecusado() {
 
-        sessao.setDataHoraFim(LocalDateTime.now());
+        sessao.setStatus(StatusEnum.ENCERRADA);
 
         doNothing().when(documentoUseCase).validarDocumento(anyString());
 
@@ -158,7 +148,7 @@ class VotacaoUseCaseTest {
 
         var resultado = votacaoUseCase.processarResultado(sessao.getId());
 
-        assertEquals(sessaoResponse.getDuracao(), resultado.getSessao().getDuracao());
+        assertEquals(sessaoResponse.getStatus(), resultado.getSessao().getStatus());
         assertNull(resultado.getTotalAprovado());
         assertNull(resultado.getTotalReprovado());
         assertEquals(0, resultado.getTotalVotos());
@@ -169,7 +159,7 @@ class VotacaoUseCaseTest {
     @DisplayName("Deve retornar resultado Aprovado")
     void shouldReturnResultadoAprovado() {
 
-        sessao.setDataHoraFim(LocalDateTime.now().minusMinutes(1));
+        sessao.setStatus(StatusEnum.ENCERRADA);
 
         List<Voto> votosList = List.of(voto1, voto2, voto3);
 
@@ -178,7 +168,6 @@ class VotacaoUseCaseTest {
         when(votoRepository.findAllBySessao(sessao)).thenReturn(votosList);
 
         var resultado = votacaoUseCase.processarResultado(sessao.getId());
-
 
         assertEquals(ResultadoVotacaoEnum.APROVADA, resultado.getResultado());
         assertEquals(votosList.size(), resultado.getTotalVotos());
