@@ -16,12 +16,7 @@ public class Pauta {
     @Column(name = "DETALHE", length = 500, nullable = true)
     private String detalhe;
 
-    @Deprecated
     public Pauta() {
-    }
-
-    public Pauta(Integer id) {
-        this.id = id;
     }
 
     public Pauta(@NotNull String descricao, @NotNull String detalhe) {

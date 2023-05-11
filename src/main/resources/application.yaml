@@ -23,6 +23,8 @@ service:
     topic: resultado-assembleia-topic
   voto:
     topic: voto-assembleia-topic
+  sessao-encerrada:
+    topic: sessao-encerrada-topic
 
 invertexto:
   token: 3486|Vu4dgWUn0CX7Xmc5PHK6uEYITXM2LUw0

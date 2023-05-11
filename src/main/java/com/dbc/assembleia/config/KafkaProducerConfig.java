@@ -25,6 +25,9 @@ public class KafkaProducerConfig {
 
     @Value("${service.voto.topic}")
     private String topicFilaVoto;
+
+    @Value("${service.sessao-encerrada.topic}")
+    private String topicSessaoEncerrada;
     private final KafkaProperties kafkaProperties;
 
     public KafkaProducerConfig(KafkaProperties kafkaProperties) {
@@ -61,7 +64,8 @@ public class KafkaProducerConfig {
     public KafkaAdmin.NewTopics topic() {
         return new KafkaAdmin.NewTopics(
                 TopicBuilder.name(topicResultado).partitions(1).replicas(1).build(),
-                TopicBuilder.name(topicFilaVoto).partitions(1).replicas(1).build()
+                TopicBuilder.name(topicFilaVoto).partitions(1).replicas(1).build(),
+                TopicBuilder.name(topicSessaoEncerrada).partitions(1).replicas(1).build()
         );
 
     }

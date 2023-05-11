@@ -19,8 +19,9 @@ public interface SessaoMapper {
     SessaoResponse toSessaoResponse(Sessao sessao);
 
     @Named("codigoToPauta")
-    public static Pauta codigoToPauta(Integer codigoPauta) {
-
-        return new Pauta(codigoPauta);
+    static Pauta codigoToPauta(Integer codigoPauta) {
+        var pauta = new Pauta();
+        pauta.setId(codigoPauta);
+        return pauta;
     }
 }

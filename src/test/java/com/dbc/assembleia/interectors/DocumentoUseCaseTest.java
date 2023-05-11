@@ -3,56 +3,53 @@ package com.dbc.assembleia.interectors;
 import com.dbc.assembleia.datasource.invertexto.CpfValid;
 import com.dbc.assembleia.datasource.invertexto.InvertextoClient;
 import com.dbc.assembleia.exception.DocumentoInvalidoException;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
-class DocumentoUseCaseTest {
+public class DocumentoUseCaseTest {
 
     @InjectMocks
     private DocumentoUseCase documentoUseCase;
-
     @Mock
-    private InvertextoClient invertextoClient;
+    private InvertextoClient client;
+
+    @Value("${invertexto.token}")
+    private String token;
+
+    private final String cpf = "00000000000";
 
     @Test
-    @DisplayName("Nao deve retornar Exception ao validar documento")
-    void shouldNotThrowsExceptionWhenValidarDocumento() {
+    public void shouldCallClient() {
 
-        var documento = "12345678900";
-        var cpfValid = new CpfValid();
-        cpfValid.setValid(true);
+        var clientResponse = new CpfValid(true, "000.000.000-00");
+        when(client.validarCpf(token, cpf)).thenReturn(clientResponse);
 
-        Mockito.when(invertextoClient.validarCpf(Mockito.anyString(), documento)).thenReturn(cpfValid);
+        documentoUseCase.validarDocumento(cpf);
 
-        Assertions.assertDoesNotThrow(() -> documentoUseCase.validarDocumento(documento));
-
-        Mockito.verify(invertextoClient, Mockito.times(1)).validarCpf(Mockito.anyString(), Mockito.anyString());
+        verify(client, times(1)).validarCpf(token, cpf);
     }
 
     @Test
-    @DisplayName("Deve retornar Exception ao validar documento")
-    void shouldThrowsExceptionWhenValidarDocumento() {
+    public void shouldCallClientAndThrowDocumentoInvalido() {
 
-        var cpfValid = new CpfValid();
-        cpfValid.setValid(false);
+        var clientResponse = new CpfValid(false, "000.000.000-00");
+        when(client.validarCpf(token, cpf)).thenReturn(clientResponse);
 
-        when(invertextoClient.validarCpf(anyString(),anyString())).thenReturn(cpfValid);
+        var exception = assertThrows(DocumentoInvalidoException.class, () -> documentoUseCase.validarDocumento(cpf));
 
-        Assertions.assertThrows(DocumentoInvalidoException.class,
-                () ->  documentoUseCase.validarDocumento(anyString()));
+        verify(client, times(1)).validarCpf(token, cpf);
+        assertNotNull(exception);
+        assertEquals("Documento informado é inválido ", exception.getMessage());
     }
-
 
 }

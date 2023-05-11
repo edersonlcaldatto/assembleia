@@ -3,6 +3,7 @@ package com.dbc.assembleia.transportlayer.impl;
 import com.dbc.assembleia.entity.Pauta;
 import com.dbc.assembleia.entity.Sessao;
 import com.dbc.assembleia.entity.Voto;
+import com.dbc.assembleia.entity.enumerator.StatusEnum;
 import com.dbc.assembleia.entity.enumerator.VotoEnum;
 import com.dbc.assembleia.interectors.PautaUseCase;
 import com.dbc.assembleia.interectors.SessaoUseCase;
@@ -34,9 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class VotacaoControllerImplTest {
 
-    private final String VOTACAO_URL = "/v1/votacao";
-    private final String RESULTADO_URL = "/v1/votacao/resultado";
-
     @Autowired
     MockMvc mvc;
 
@@ -65,9 +63,9 @@ class VotacaoControllerImplTest {
         sessaoMock.setPauta(pautaCriada);
         sessaoMock.setDataHoraInicio(LocalDateTime.now());
         sessaoMock.setDataHoraFim(LocalDateTime.now().plusMinutes(10));
-        sessaoMock.setDuracao(10);
+        sessaoMock.setStatus(StatusEnum.ABERTA);
 
-        sessaoCriada = sessaoUseCase.cadastrar(sessaoMock);
+        sessaoCriada = sessaoUseCase.abrirSessao(sessaoMock);
     }
 
     @Test
@@ -81,6 +79,7 @@ class VotacaoControllerImplTest {
 
         String json = new ObjectMapper().writeValueAsString(votoMock);
 
+        String VOTACAO_URL = "/v1/votacao";
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .post(VOTACAO_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -106,6 +105,7 @@ class VotacaoControllerImplTest {
 
         votos.forEach(votoRequest -> votacaoUseCase.computarVoto(votoRequest));
 
+        String RESULTADO_URL = "/v1/votacao/resultado";
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(RESULTADO_URL.concat("/"+sessaoCriada.getId()))
                 .contentType(MediaType.APPLICATION_JSON);

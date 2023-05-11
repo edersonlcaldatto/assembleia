@@ -31,7 +31,6 @@ public class PautaUseCaseTest {
         this.pautaUseCase = new PautaUseCase(pautaRepository);
         pauta = new Pauta("Pauta teste 1", "Datalhe da Pauta");
     }
-
     @Test
     void testCadastrar() {
         Pauta pautaToSave = pauta;
@@ -59,8 +58,6 @@ public class PautaUseCaseTest {
     void testFind_PautaNaoLocalizadaException() {
         when(pautaRepository.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(PautaNaoLocalizadaException.class, () -> {
-            pautaUseCase.find(1);
-        });
+        assertThrows(PautaNaoLocalizadaException.class, () -> pautaUseCase.find(1));
     }
 }

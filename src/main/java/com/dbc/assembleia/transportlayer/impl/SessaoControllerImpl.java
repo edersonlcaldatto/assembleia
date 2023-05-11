@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -28,13 +25,24 @@ public class SessaoControllerImpl {
     }
 
     @PostMapping
-    public ResponseEntity<SessaoResponse> cadastrarSessao(@RequestBody @Valid SessaoRequest sessaoRequest){
-        LOG.info("Cadastrar nova sessao {}", sessaoRequest);
+    public ResponseEntity<SessaoResponse> abrirSessao(@RequestBody @Valid SessaoRequest sessaoRequest){
+        LOG.info("Abrindo nova sessao {}", sessaoRequest);
         var sessaoToSave = SessaoMapper.INSTANCE.fromSesssaoRequest(sessaoRequest);
-        var sessaoResponse =  SessaoMapper.INSTANCE.toSessaoResponse(sessaoUseCase.cadastrar(sessaoToSave));
+        var sessaoResponse =  SessaoMapper.INSTANCE.toSessaoResponse(sessaoUseCase.abrirSessao(sessaoToSave));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(sessaoResponse);
     }
+
+    @PostMapping("/encerrar/{id}")
+    public ResponseEntity<SessaoResponse> encerrarSessao(@PathVariable("id") Integer idSessao){
+        LOG.info("Encerrando sessao {}", idSessao);
+
+        var sessaoResponse =  SessaoMapper.INSTANCE.toSessaoResponse(sessaoUseCase.encerrarSessao(idSessao));
+
+        return ResponseEntity.status(HttpStatus.OK).body(sessaoResponse);
+    }
+
+
 
 
 }

@@ -6,7 +6,6 @@ public class SessaoRequest {
 
     @NotNull
     private Integer codigoPauta;
-    private Integer duracao = 1;
 
     public Integer getCodigoPauta() {
         return codigoPauta;
@@ -16,11 +15,4 @@ public class SessaoRequest {
         this.codigoPauta = codigoPauta;
     }
 
-    public Integer getDuracao() {
-        return duracao;
-    }
-
-    public void setDuracao(Integer duracao) {
-        this.duracao = duracao;
-    }
 }
