@@ -55,8 +55,8 @@ class PautaControllerImplTest {
         String responseJson = result.getResponse().getContentAsString();
         Assertions.assertFalse(responseJson.isEmpty());
         var pautaCriada = new ObjectMapper().readValue(responseJson, PautaResponse.class);
-        Assertions.assertEquals(1, pautaCriada.getId());
-        Assertions.assertEquals(descricao, pautaCriada.getDescricao());
+        Assertions.assertEquals(1, pautaCriada.id());
+        Assertions.assertEquals(descricao, pautaCriada.descricao());
     }
 
 

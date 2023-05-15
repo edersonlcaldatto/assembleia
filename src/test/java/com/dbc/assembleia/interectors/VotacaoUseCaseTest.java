@@ -90,7 +90,7 @@ class VotacaoUseCaseTest {
         var result = votacaoUseCase.computarVoto(voto1);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(result.getStatus(), VotoStatusEnum.PROCESSAO);
+        Assertions.assertEquals(result.status(), VotoStatusEnum.PROCESSAO);
     }
 
     @Test
@@ -110,7 +110,7 @@ class VotacaoUseCaseTest {
         var result = votacaoUseCase.computarVoto(voto1);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(result.getStatus(), VotoStatusEnum.RECUSADO);
+        Assertions.assertEquals(result.status(), VotoStatusEnum.RECUSADO);
     }
 
     @Test
@@ -148,7 +148,7 @@ class VotacaoUseCaseTest {
 
         var resultado = votacaoUseCase.processarResultado(sessao.getId());
 
-        assertEquals(sessaoResponse.getStatus(), resultado.getSessao().getStatus());
+        assertEquals(sessaoResponse.status(), resultado.getSessao().status());
         assertNull(resultado.getTotalAprovado());
         assertNull(resultado.getTotalReprovado());
         assertEquals(0, resultado.getTotalVotos());
